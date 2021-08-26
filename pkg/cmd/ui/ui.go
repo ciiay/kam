@@ -1,9 +1,11 @@
 package ui
 
 import (
+	"bytes"
 	"fmt"
 	"path/filepath"
 	"strings"
+	"text/tabwriter"
 
 	"github.com/redhat-developer/kam/pkg/pipelines/ioutils"
 	"github.com/spf13/afero"
@@ -233,11 +235,24 @@ func SelectOptionPushToGit() bool {
 }
 
 // UseDefaultValues allows users to use default values so that they will be prompted with fewer questions in interactive mode
-func UseDefaultValues() bool {
+func UseDefaultValues(defaultFlagValues map[string]interface{}) bool {
+	// Print default values
+	flagValues := "\n\nDefault values:\n"
+	buff := bytes.Buffer{}
+	w := tabwriter.NewWriter(&buff, 0, 8, 1, '\t', tabwriter.AlignRight)
+	for k, v := range defaultFlagValues {
+		if k != "interactive" {
+			fmt.Fprintf(w, "--%v\t\"%v\"\n", k, v)
+		}
+	}
+	w.Flush()
+	vStr := buff.String()
+	flagValues += vStr
+
 	var useDefaults string
 	prompt := &survey.Select{
 		Message: "Do you want to accept all default values and be prompted only for the minimum required options?",
-		Help:    "Select yes to accept default values or select no to be prompted for all options that haven't already been specified on the command line",
+		Help:    "Select yes to accept default values or select no to be prompted for all options that haven't already been specified on the command line" + flagValues,
 		Options: []string{"yes", "no"},
 		Default: "yes",
 	}
