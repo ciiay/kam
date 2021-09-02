@@ -237,7 +237,7 @@ func SelectOptionPushToGit() bool {
 // UseDefaultValues allows users to use default values so that they will be prompted with fewer questions in interactive mode
 func UseDefaultValues(defaultFlagValues map[string]interface{}) bool {
 	// Print default values
-	flagValues := "\n\nDefault values (Can be overwritten from the command line):\n"
+	flagValues := "\n\nThe default values used for the options, if not overwritten from the command line, are:\n"
 	buff := bytes.Buffer{}
 	w := tabwriter.NewWriter(&buff, 0, 8, 1, '\t', tabwriter.AlignRight)
 	for k, v := range defaultFlagValues {
