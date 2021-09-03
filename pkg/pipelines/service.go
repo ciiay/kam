@@ -124,16 +124,18 @@ func serviceResources(m *config.Manifest, appFs afero.Fs, o *AddServiceOptions) 
 				o.ImageRepo = m.Config.Pipelines.Name + "/" + repoName
 			}
 
-			_, resources, bindingName, err := createImageRepoResources(m, cfg, env, o)
-			if err != nil {
-				return nil, nil, err
-			}
+			if o.GitRepoURL != "" {
+				_, resources, bindingName, err := createImageRepoResources(m, cfg, env, o)
+				if err != nil {
+					return nil, nil, err
+				}
 
-			files = res.Merge(resources, files)
-			svc.Pipelines = &config.Pipelines{
-				Integration: &config.TemplateBinding{
-					Bindings: append([]string{bindingName}, env.Pipelines.Integration.Bindings...),
-				},
+				files = res.Merge(resources, files)
+				svc.Pipelines = &config.Pipelines{
+					Integration: &config.TemplateBinding{
+						Bindings: append([]string{bindingName}, env.Pipelines.Integration.Bindings...),
+					},
+				}
 			}
 		}
 	}
