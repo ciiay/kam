@@ -580,8 +580,8 @@ func TestAddServiceWithoutGitRepoUrl(t *testing.T) {
 	}
 
 	got, otherResources, err := serviceResources(m, fakeFs, &AddServiceOptions{
-		AppName: "new-app",
-		EnvName: "test-dev",
+		AppName:             "new-app",
+		EnvName:             "test-dev",
 		PipelinesFolderPath: pipelinesFile,
 		WebhookSecret:       "123",
 		ServiceName:         "test",
